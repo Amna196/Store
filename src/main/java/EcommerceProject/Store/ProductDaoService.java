@@ -1,9 +1,9 @@
 package EcommerceProject.Store;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //Component annotation => means only a single instance of the annotated class gets created.
@@ -36,11 +36,11 @@ public class ProductDaoService {
 	static {
 		products.add(new Product(1,"Nike", "SportTop","First", categories.get(0).getID(), brands.get(0).getID(), false, true, true, "http/tops", "white", 19.750));
 		
-		products.add(new Product(2,"Ellese", "SportTop","Second",  categories.get(1).getID(), brands.get(1).getID(), true, false, true, "http/tops", "black", 25));
+		products.add(new Product(2,"Ellese", "SportTop","Second",  categories.get(1).getID(), brands.get(1).getID(), true, false, true, "http/tops", "black", 25.0));
 		
-		products.add(new Product(3,"Adidas", "SportTop","Third",  categories.get(2).getID(), brands.get(2).getID(), true, true, true, "http/tops", "red", 15));
+		products.add(new Product(3,"Adidas", "SportTop","Third",  categories.get(2).getID(), brands.get(2).getID(), true, true, true, "http/tops", "red", 15.0));
 		
-		products.add(new Product(4,"Twan", "Classic Top","Fourth",  categories.get(3).getID(), brands.get(3).getID(), false, true, true, "http/tops", "pink", 22));
+		products.add(new Product(4,"Twan", "Classic Top","Fourth",  categories.get(3).getID(), brands.get(3).getID(), false, true, true, "http/tops", "pink", 22.0));
 		
 		products.add(new Product(5,"Puma", "SportTop","Fifth",  categories.get(0).getID(), brands.get(0).getID(), true, true, true,"http/tops", "gray", 9.850));
 		
@@ -98,10 +98,17 @@ public class ProductDaoService {
 		return productsBrand;
 	}
 
-	public List<Product> findAll(Sort.Direction asc, String sortBy) {
-		List<Product> sortedAsc = new ArrayList<>();
-		products.stream().sorted();
-		return sortedAsc;
+	// sort products upon price in ascending order
+	public List<Product> sortByPriceAsc(){
+		Collections.sort(products);
+		return products;
+	}
+
+	// sort products upon price in descending order
+	public List<Product> sortByPriceDesc(){
+		Collections.sort(products);
+		Collections.reverse(products);
+		return products;
 	}
 
 

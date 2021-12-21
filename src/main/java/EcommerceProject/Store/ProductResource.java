@@ -13,10 +13,6 @@ public class ProductResource {
 	@Autowired
 	private ProductDaoService service;
 
-	@Autowired(required=false)
-	private ProductRepository productRepository;
-	
-	
 	@GetMapping("/products")
 	public List<Product> retrieveAllProducts(){
 		return service.findAll();
@@ -43,10 +39,15 @@ public class ProductResource {
 	}
 
 	//TODO: SortProductsPriceInAsc
-	@GetMapping("/products/sortByPriceAsc/{price}")
-	public List<Product> retrieveSortProductsByPriceAsc(@PathVariable String price){
-		return productRepository.getSortProductsByPriceAsc(price);//.findAll(Sort.by(Sort.Direction.ASC, "price"));
+	@GetMapping("/products/sortByPriceAsc")
+	public List<Product> retrieveSortProductsByPriceAsc(){
+		List<Product> sortedProducts =  service.sortByPriceAsc();
+		return sortedProducts;
 	}
 
-	//TODO: SortProductsPriceInDecs
+	//TODO: SortProductsPriceInDesc
+	@GetMapping("/products/sortByPriceDesc")
+	public List<Product> retrieveSortProductsByPriceDesc(){
+		return service.sortByPriceDesc();
+	}
 }

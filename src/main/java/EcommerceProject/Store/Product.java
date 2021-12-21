@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Product {
+public class Product implements Comparable<Product> {
 	
 	// Define attributes of Product class
 	@Id
@@ -32,7 +32,7 @@ public class Product {
 	private int Category_id;
 	private String ImageUrl;
 	private String Color;
-	private double Price;
+	private Double Price;
 	
 	//Constructors
 //	public Product() {
@@ -40,7 +40,7 @@ public class Product {
 //	}
 	
 	public Product(Integer iD, String title, String description, String slug, int category_id, int brand_id, boolean new1, boolean featured,
-			boolean active, String imageUrl, String color, double price) {
+			boolean active, String imageUrl, String color, Double price) {
 		ID = iD;
 		Title = title; //call method to define the title
 		Description = description;
@@ -124,11 +124,16 @@ public class Product {
 	public void setColor(String color) {
 		Color = color;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return Price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		Price = price;
 	}
-	
+
+	@Override
+	public int compareTo(Product product) {
+		int compare = getPrice().compareTo(product.getPrice());
+		return compare;
+	}
 }
