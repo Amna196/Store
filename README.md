@@ -1,5 +1,3 @@
-
-
 # Ecommerce-Project
 It is a Java Ecommerce project written and compiled in Java Spring Boot framework.
 
