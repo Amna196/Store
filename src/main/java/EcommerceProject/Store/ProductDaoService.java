@@ -1,5 +1,6 @@
 package EcommerceProject.Store;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ public class ProductDaoService {
 	
 	private static List<Category> categories = new ArrayList<>();
 	static {
-		categories.add(new Category("c1","Very cool","http/tops.c1"));
-		categories.add(new Category("c2","Very nice","http/tops.c2"));
-		categories.add(new Category("c3","Very light","http/tops.c3"));
-		categories.add(new Category("c4","Very well","http/tops.c4"));
-		categories.add(new Category("c5","Very good","http/tops.c5"));
+		categories.add(new Category(1,"c1","Very cool","http/tops.c1"));
+		categories.add(new Category(2, "c2","Very nice","http/tops.c2"));
+		categories.add(new Category(3, "c3","Very light","http/tops.c3"));
+		categories.add(new Category(4, "c4","Very well","http/tops.c4"));
+		categories.add(new Category(5, "c5","Very good","http/tops.c5"));
 		
 	}
 	
@@ -33,25 +34,20 @@ public class ProductDaoService {
 	private static List<Product> products = new ArrayList<>();
 	
 	static {
-		products.add(new Product(1,"Nike", "SportTop","First", false, true, true, "http/tops", "white", 19.750));
+		products.add(new Product(1,"Nike", "SportTop","First", categories.get(0).getID(), brands.get(0).getID(), false, true, true, "http/tops", "white", 19.750));
 		
-		products.add(new Product(2,"Ellese", "SportTop","Second", true, false, true, "http/tops", "black", 25));
+		products.add(new Product(2,"Ellese", "SportTop","Second",  categories.get(1).getID(), brands.get(1).getID(), true, false, true, "http/tops", "black", 25));
 		
-		products.add(new Product(3,"Adidas", "SportTop","Third", true, true, true, "http/tops", "red", 15));
+		products.add(new Product(3,"Adidas", "SportTop","Third",  categories.get(2).getID(), brands.get(2).getID(), true, true, true, "http/tops", "red", 15));
 		
-		products.add(new Product(4,"Twan", "Classic Top","Fourth", false, true, true, "http/tops", "pink", 22));
+		products.add(new Product(4,"Twan", "Classic Top","Fourth",  categories.get(3).getID(), brands.get(3).getID(), false, true, true, "http/tops", "pink", 22));
 		
-		products.add(new Product(5,"Puma", "SportTop","Fifth", true, true, true,"http/tops", "gray", 9.850));
+		products.add(new Product(5,"Puma", "SportTop","Fifth",  categories.get(0).getID(), brands.get(0).getID(), true, true, true,"http/tops", "gray", 9.850));
 		
 	}
 	
 	//find all products
 	public List<Product> findAll() {
-		for(Product product : products){
-			// set same brands and categories list to all products
-			product.setBrands(brands);
-			product.setCategories(categories);
-		}
 		return products;
 	}
 	
@@ -78,29 +74,36 @@ public class ProductDaoService {
 	}
 		
 
-//	// get products upon category 
-//	public List<Product> findByCategory(List<Category> category) {
-//		List<Product> productsCategory = new ArrayList<>(); //list of products of the same category
-//		for(Product product : products) { 
-//			if(product.getCategory().getTitle() == category.getTitle()) {
-//				productsCategory.add(product);
-//			}
-//		}
-//		return productsCategory;
-//	}
-//	
-//	// get products upon brand 
-//	public List<Product> findByBrand(String brand) {
-//		List<Product> productsBrand = new ArrayList<>(); //list of products of the same brand
-//		for(Product product : products) { 
-//			if(product.getBrand() == brand) {
-//				productsBrand.add(product);
-//				
-//			}
-//		}
-//		return productsBrand;
-//	}
-	
+	// get products upon category
+	public List<Product> findByCategory(int category) {
+		List<Product> productsCategory = new ArrayList<>(); //list of products of the same category
+
+		for(Product product : products) {
+			if( product.getCategory() == category){
+				productsCategory.add(product);
+				}
+			}
+			return productsCategory;
+		}
+
+	// get products upon brand
+	public List<Product> findByBrand(int brand_id) {
+		List<Product> productsBrand = new ArrayList<>(); //list of products of the same brand
+		for(Product product : products) {
+			if(product.getBrand() == brand_id) {
+				productsBrand.add(product);
+
+			}
+		}
+		return productsBrand;
+	}
+
+	public List<Product> findAll(Sort.Direction asc, String sortBy) {
+		List<Product> sortedAsc = new ArrayList<>();
+		products.stream().sorted();
+		return sortedAsc;
+	}
+
 
 //	//save product to the list
 //	public Product save(Product product) {

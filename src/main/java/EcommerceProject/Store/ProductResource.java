@@ -1,19 +1,20 @@
 package EcommerceProject.Store;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ProductResource {
 
 	@Autowired
 	private ProductDaoService service;
+
+	@Autowired(required=false)
+	private ProductRepository productRepository;
 	
 	
 	@GetMapping("/products")
@@ -30,16 +31,22 @@ public class ProductResource {
 	public List<Product> retrieveFeaturedProducts(@PathVariable boolean featured){
 		return service.findFeatured(featured);
 	}
-	
-//	//TODO: retrieveProductsByCategory
-//	@GetMapping("/products/category/{category_title}") 
-//	public List<Product> retrieveProductsByCategory(@PathVariable Category category_title){
-//		return service.findByCategory(category_title);
-//	}
-//	
-//	//TODO: retrieveProductsByBrand
-//	@GetMapping("/products/brand/{brand}") 
-//	public List<Product> retrieveProductsByBrand(@PathVariable String brand){
-//		return service.findByBrand(brand);
-//	}
+
+	@GetMapping("/products/category_id/{category_id}")
+	public List<Product> retrieveProductsByCategory(@PathVariable int category_id){
+		return service.findByCategory(category_id);
+	}
+
+	@GetMapping("/products/brand_id/{brand_id}")
+	public List<Product> retrieveProductsByBrand(@PathVariable int brand_id){
+		return service.findByBrand(brand_id);
+	}
+
+	//TODO: SortProductsPriceInAsc
+	@GetMapping("/products/sortByPriceAsc/{price}")
+	public List<Product> retrieveSortProductsByPriceAsc(@PathVariable String price){
+		return productRepository.getSortProductsByPriceAsc(price);//.findAll(Sort.by(Sort.Direction.ASC, "price"));
+	}
+
+	//TODO: SortProductsPriceInDecs
 }

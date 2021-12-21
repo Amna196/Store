@@ -1,7 +1,7 @@
 package EcommerceProject.Store;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
@@ -10,6 +10,8 @@ public class Product {
 	@Id
 	@GeneratedValue
 	private Integer ID;
+
+	@Size(min=1, max=255, message="Give Your Product a Title!")
 	private String Title;
 	private String Description;
 	private String Slug;
@@ -24,10 +26,10 @@ public class Product {
 	private boolean Active;
 	
 	@OneToMany(mappedBy="ID")
-	private List<Brand> Brands;
+	private int Brand_id;
 	
 	@OneToMany(mappedBy="ID")
-	private List<Category> Categories;
+	private int Category_id;
 	private String ImageUrl;
 	private String Color;
 	private double Price;
@@ -37,18 +39,20 @@ public class Product {
 //		super();
 //	}
 	
-	public Product(Integer iD, String title, String description, String slug, boolean new1, boolean featured,
-			boolean active, String imageUrl, String color, double d) {
+	public Product(Integer iD, String title, String description, String slug, int category_id, int brand_id, boolean new1, boolean featured,
+			boolean active, String imageUrl, String color, double price) {
 		ID = iD;
-		Title = title;
+		Title = title; //call method to define the title
 		Description = description;
 		Slug = slug;
+		Brand_id = brand_id;
+		Category_id = category_id;
 		New = new1;
 		Featured = featured;
 		Active = active;
 		ImageUrl = imageUrl;
 		Color = color;
-		Price = d;
+		Price = price;
 	}
 
 	// Setters & Getters methods
@@ -96,17 +100,17 @@ public class Product {
 	public void setActive(boolean active) {
 		Active = active;
 	}
-	public List<Brand> getBrands() {
-		return Brands;
+	public int getBrand() {
+		return Brand_id;
 	}
-	public void setBrands(List<Brand> brands) {
-		Brands = brands;
+	public void setBrand(int brand_id) {
+		Brand_id = brand_id;
 	}
-	public List<Category> getCategories() {
-		return Categories;
+	public int getCategory() {
+		return Category_id;
 	}
-	public void setCategories(List<Category> categories) {
-		Categories = categories;
+	public void setCategory(int category_id) {
+		Category_id = category_id;
 	}
 	public String getImageUrl() {
 		return ImageUrl;
