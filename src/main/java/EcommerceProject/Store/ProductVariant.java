@@ -47,4 +47,5 @@ public class ProductVariant {
     public void setProduct_id(int product_id) {
         this.product_id = product_id;
     }
+
 }

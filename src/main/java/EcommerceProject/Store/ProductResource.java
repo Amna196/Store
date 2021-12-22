@@ -17,6 +17,19 @@ public class ProductResource {
 	public List<Product> retrieveAllProducts(){
 		return service.findAll();
 	}
+
+//	// TODO: PAGING GET APP PRODUCTS
+//	@GetMapping("/products_pagination")
+//	public List<Product> retrieveAllProductsPaging(@PageableDefault(page=0, size=4) Pageable pageRequest){
+//		Page<Product> productPage =  service.findAllPagable(pageRequest);
+//		productPage.getContent();
+//		List<Product> productResultPage = productPage.getContent();
+//		productResultPage = productResultPage.stream().map(product -> {
+//			converterService.converToDto(product);
+//			return product;
+//		}).collect(Collectors.toList());
+//		return productResultPage;
+//	}
 	
 	@GetMapping("/products/new/{New}")
 	public List<Product> retrieveNewProducts(@PathVariable boolean New){
@@ -38,16 +51,22 @@ public class ProductResource {
 		return service.findByBrand(brand_id);
 	}
 
-	//TODO: SortProductsPriceInAsc
 	@GetMapping("/products/sortByPriceAsc")
 	public List<Product> retrieveSortProductsByPriceAsc(){
 		List<Product> sortedProducts =  service.sortByPriceAsc();
 		return sortedProducts;
 	}
 
-	//TODO: SortProductsPriceInDesc
 	@GetMapping("/products/sortByPriceDesc")
 	public List<Product> retrieveSortProductsByPriceDesc(){
 		return service.sortByPriceDesc();
 	}
+
+//	@GetMapping("/products/{pageNo}")
+//	public List<Product> getProductList(@PathVariable("pageNo")int pageNo){
+//		int pageSize = 2;
+//		List<Product> products = service.getProductsList(pageNo-1,pageSize);
+//				//.getUserList(pageNo-1,5);
+//		return products;
+//	}
 }

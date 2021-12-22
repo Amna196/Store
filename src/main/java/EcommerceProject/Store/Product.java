@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Product implements Comparable<Product> {
+public class Product implements Comparable<Product>{
 	
 	// Define attributes of Product class
 	@Id
@@ -26,10 +26,12 @@ public class Product implements Comparable<Product> {
 	private boolean Active;
 	
 	@OneToMany(mappedBy="ID")
-	private int Brand_id;
+	private int BrandId;
+	private String BrandTitle;
 	
 	@OneToMany(mappedBy="ID")
-	private int Category_id;
+	private int CategoryId;
+	private String CategoryTitle;
 	private String ImageUrl;
 	private String Color;
 	private Double Price;
@@ -39,20 +41,22 @@ public class Product implements Comparable<Product> {
 //		super();
 //	}
 	
-	public Product(Integer iD, String title, String description, String slug, int category_id, int brand_id, boolean new1, boolean featured,
+	public Product(Integer iD, String description, String slug, int category_id, String category_title, int brand_id, String brand_title, boolean new1, boolean featured,
 			boolean active, String imageUrl, String color, Double price) {
 		ID = iD;
-		Title = title; //call method to define the title
 		Description = description;
 		Slug = slug;
-		Brand_id = brand_id;
-		Category_id = category_id;
+		BrandId = brand_id;
+		BrandTitle = brand_title;
+		CategoryId = category_id;
+		CategoryTitle = category_title;
 		New = new1;
 		Featured = featured;
 		Active = active;
 		ImageUrl = imageUrl;
 		Color = color;
 		Price = price;
+		this.setTitle(setProductTitle());
 	}
 
 	// Setters & Getters methods
@@ -100,17 +104,17 @@ public class Product implements Comparable<Product> {
 	public void setActive(boolean active) {
 		Active = active;
 	}
-	public int getBrand() {
-		return Brand_id;
+	public int getBrand_id() {
+		return BrandId;
 	}
-	public void setBrand(int brand_id) {
-		Brand_id = brand_id;
+	public void setBrand_id(int brand_id) {
+		BrandId = brand_id;
 	}
-	public int getCategory() {
-		return Category_id;
+	public int getCategory_id() {
+		return CategoryId;
 	}
-	public void setCategory(int category_id) {
-		Category_id = category_id;
+	public void setCategory_id(int category_id) {
+		CategoryId = category_id;
 	}
 	public String getImageUrl() {
 		return ImageUrl;
@@ -129,6 +133,39 @@ public class Product implements Comparable<Product> {
 	}
 	public void setPrice(Double price) {
 		Price = price;
+	}
+
+	public String getBrand_title() {
+		return BrandTitle;
+	}
+
+	public void setBrand_title(String brand_title) {
+		BrandTitle = brand_title;
+	}
+
+	public String getCategory_title() {
+		return CategoryTitle;
+	}
+
+	public void setCategory_title(String category_title) {
+		CategoryTitle = category_title;
+	}
+
+	// Customising product title to be displayed in `isNew-Color-Brand` format
+	public String setProductTitle(){
+		try {
+			if (this.isNew()) {
+				return "New-" + this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand_title().substring(0, 1).toUpperCase() + this.getBrand_title().substring(1);
+			}
+			return this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand_title().substring(0, 1).toUpperCase() + this.getBrand_title().substring(1);
+		}catch(Exception e){
+			throw new RuntimeException("Title is not set correctly");
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Product [ID:" + getID() +", Title:" + getTitle() + "]";
 	}
 
 	@Override
