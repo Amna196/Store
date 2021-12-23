@@ -1,4 +1,6 @@
-package EcommerceProject.Store;
+package EcommerceProject.Store.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -10,7 +12,6 @@ public class Product implements Comparable<Product>{
 	@Id
 	@GeneratedValue
 	private Integer ID;
-
 	@Size(min=1, max=255, message="Give Your Product a Title!")
 	private String Title;
 	private String Description;
@@ -25,31 +26,29 @@ public class Product implements Comparable<Product>{
 	@Column(name="active_product")
 	private boolean Active;
 	
-	@OneToMany(mappedBy="ID")
-	private int BrandId;
-	private String BrandTitle;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonIgnore
+	private Brand Brand;
 	
-	@OneToMany(mappedBy="ID")
-	private int CategoryId;
-	private String CategoryTitle;
+	@ManyToOne(fetch=FetchType.LAZY)//@OneToMany(mappedBy="ID")
+	@JsonIgnore
+	private Category Category;
 	private String ImageUrl;
 	private String Color;
 	private Double Price;
 	
-	//Constructors
-//	public Product() {
-//		super();
-//	}
+//	Constructors
+	public Product() {
+
+	}
 	
-	public Product(Integer iD, String description, String slug, int category_id, String category_title, int brand_id, String brand_title, boolean new1, boolean featured,
+	public Product(Integer iD, String description, String slug, Category category, Brand brand, boolean new1, boolean featured,
 			boolean active, String imageUrl, String color, Double price) {
 		ID = iD;
 		Description = description;
 		Slug = slug;
-		BrandId = brand_id;
-		BrandTitle = brand_title;
-		CategoryId = category_id;
-		CategoryTitle = category_title;
+		Brand = brand;
+		Category = category;
 		New = new1;
 		Featured = featured;
 		Active = active;
@@ -104,17 +103,17 @@ public class Product implements Comparable<Product>{
 	public void setActive(boolean active) {
 		Active = active;
 	}
-	public int getBrand_id() {
-		return BrandId;
+	public Brand getBrand() {
+		return Brand;
 	}
-	public void setBrand_id(int brand_id) {
-		BrandId = brand_id;
+	public void setBrand_id(Brand brand) {
+		Brand = brand;
 	}
-	public int getCategory_id() {
-		return CategoryId;
+	public Category getCategory() {
+		return Category;
 	}
-	public void setCategory_id(int category_id) {
-		CategoryId = category_id;
+	public void setCategory_id(Category category) {
+		Category = category;
 	}
 	public String getImageUrl() {
 		return ImageUrl;
@@ -135,29 +134,13 @@ public class Product implements Comparable<Product>{
 		Price = price;
 	}
 
-	public String getBrand_title() {
-		return BrandTitle;
-	}
-
-	public void setBrand_title(String brand_title) {
-		BrandTitle = brand_title;
-	}
-
-	public String getCategory_title() {
-		return CategoryTitle;
-	}
-
-	public void setCategory_title(String category_title) {
-		CategoryTitle = category_title;
-	}
-
 	// Customising product title to be displayed in `isNew-Color-Brand` format
 	public String setProductTitle(){
 		try {
 			if (this.isNew()) {
-				return "New-" + this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand_title().substring(0, 1).toUpperCase() + this.getBrand_title().substring(1);
+				return "New-" + this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand().getTitle().substring(0,1).toUpperCase() + this.getBrand().getTitle().substring(1);
 			}
-			return this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand_title().substring(0, 1).toUpperCase() + this.getBrand_title().substring(1);
+			return this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand().getTitle().substring(0,1).toUpperCase() + this.getBrand().getTitle().substring(1);
 		}catch(Exception e){
 			throw new RuntimeException("Title is not set correctly");
 		}

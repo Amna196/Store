@@ -1,4 +1,4 @@
-package EcommerceProject.Store;
+package EcommerceProject.Store.entity;
 
 public class ProductVariant {
 
@@ -46,6 +46,10 @@ public class ProductVariant {
 
     public void setProduct_id(int product_id) {
         this.product_id = product_id;
+    }
+    @Override
+    public String toString() {
+        return "Variant [sku=" + sku +", size=" + size + ", productId=" + product_id + ", quantity=" + quantity + "]";
     }
 
 }

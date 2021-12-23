@@ -1,14 +1,10 @@
-package EcommerceProject.Store;
+package EcommerceProject.Store.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name="Brand")
 public class Brand {
 	
 	// Define attributes of Brand class
@@ -18,18 +14,20 @@ public class Brand {
 		private String Title;
 		private String Description;
 		private String BannerImage;
-		
-		@ManyToOne(fetch=FetchType.LAZY)
-		@JsonIgnore
-		private Product product;
+		@OneToMany(mappedBy="ID")
+		private List<Product> products;
 
 		//Constructor
-		public Brand(int iD, String title, String description, String bannerImage) {
-			ID = iD;
-			Title = title;
-			Description = description;
-			BannerImage = bannerImage;
+		public Brand() {
+
 		}
+
+		public Brand(int iD, String title, String description, String bannerImage) {
+				ID = iD;
+				Title = title;
+				Description = description;
+				BannerImage = bannerImage;
+			}
 
 		// Setters & Getters methods
 		public int getID() {
@@ -64,6 +62,10 @@ public class Brand {
 			BannerImage = bannerImage;
 		}
 
+	@Override
+	public String toString() {
+		return "Brand [id=" + ID +", Title=" + Title + ", Description=" + Description +"]";
+	}
 //		public Product getProduct() {
 //			return product;
 //		}

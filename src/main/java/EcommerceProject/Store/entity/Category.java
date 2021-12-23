@@ -1,8 +1,10 @@
-package EcommerceProject.Store;
+package EcommerceProject.Store.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -14,12 +16,14 @@ public class Category {
 	private String Title;
 	private String Description;
 	private String BannerImage;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JsonIgnore
-	private Product product;
+	@OneToMany(mappedBy="ID")
+	private List<Product> products;
 	
 	//Constructor
+
+	public Category() {
+	}
+
 	public Category(int iD, String title, String description, String bannerImage) {
 		ID = iD;
 		Title = title;
@@ -54,7 +58,10 @@ public class Category {
 	public void setID(int iD) {
 		ID = iD;
 	}
-	
+	@Override
+	public String toString() {
+		return "Category [id=" + ID +", Title=" + Title + ", Description=" + Description +"]";
+	}
 	
 	
 }
