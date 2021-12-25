@@ -8,74 +8,65 @@ import java.util.List;
 public class Brand {
 	
 	// Define attributes of Brand class
-		@Id
-		@GeneratedValue
-		private int ID;
-		private String Title;
-		private String Description;
-		private String BannerImage;
-		@OneToMany(mappedBy="ID")
-		private List<Product> products;
+	@Id
+	@GeneratedValue
+	private int iD;
+	private String title;
+	private String description;
+	private String bannerImage;
+	@OneToMany(mappedBy="iD")
+	private List<Product> products;
 
-		//Constructor
-		public Brand() {
+	//Constructor
+	public Brand() {
 
-		}
+	}
 
-		public Brand(int iD, String title, String description, String bannerImage) {
-				ID = iD;
-				Title = title;
-				Description = description;
-				BannerImage = bannerImage;
-			}
+	public Brand(int iD, String title, String description, String bannerImage) {
+		this.iD = iD;
+		this.title = title;
+		this.description = description;
+		this.bannerImage = bannerImage;
+	}
 
-		// Setters & Getters methods
-		public int getID() {
-			return ID;
-		}
+	// Setters & Getters methods
 
-		public void setID(int iD) {
-			ID = iD;
-		}
 
-		public String getTitle() {
-			return Title;
-		}
+	public int getiD() {
+		return iD;
+	}
 
-		public void setTitle(String title) {
-			Title = title;
-		}
+	public void setiD(int iD) {
+		this.iD = iD;
+	}
 
-		public String getDescription() {
-			return Description;
-		}
+	public String getTitle() {
+		return title;
+	}
 
-		public void setDescription(String description) {
-			Description = description;
-		}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-		public String getBannerImage() {
-			return BannerImage;
-		}
+	public String getDescription() {
+		return description;
+	}
 
-		public void setBannerImage(String bannerImage) {
-			BannerImage = bannerImage;
-		}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getBannerImage() {
+		return bannerImage;
+	}
+
+	public void setBannerImage(String bannerImage) {
+		this.bannerImage = bannerImage;
+	}
 
 	@Override
 	public String toString() {
-		return "Brand [id=" + ID +", Title=" + Title + ", Description=" + Description +"]";
+		return "Brand [id=" + iD +", Title=" + title + ", Description=" + description +"]";
 	}
-//		public Product getProduct() {
-//			return product;
-//		}
-//
-//		public void setProduct(Product product) {
-//			this.product = product;
-//		}
-		
-		
-		
-		
 		
 }

@@ -10,134 +10,155 @@ public class Product implements Comparable<Product>{
 	
 	// Define attributes of Product class
 	@Id
-	@GeneratedValue
-	private Integer ID;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer iD;
 	@Size(min=1, max=255, message="Give Your Product a Title!")
-	private String Title;
-	private String Description;
-	private String Slug;
+	private String title;
+	private String description;
+	private String slug;
 	
-	@Column(name="new_product")
-	private boolean New;
+//	@Column(name="new_product")
+	private boolean newProduct;
 	
-	@Column(name="featured_product")
-	private boolean Featured;
+//	@Column(name="featured_product")
+	private boolean featuredProduct;
 	
-	@Column(name="active_product")
-	private boolean Active;
+//	@Column(name="active_product")
+	private boolean activeProduct;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
-	private Brand Brand;
+	private Brand brand;
 	
 	@ManyToOne(fetch=FetchType.LAZY)//@OneToMany(mappedBy="ID")
 	@JsonIgnore
-	private Category Category;
-	private String ImageUrl;
-	private String Color;
-	private Double Price;
+	private Category category;
+	private String imageUrl;
+	private String color;
+	private Double price;
 	
 //	Constructors
-	public Product() {
+	protected Product() {
 
 	}
-	
-	public Product(Integer iD, String description, String slug, Category category, Brand brand, boolean new1, boolean featured,
-			boolean active, String imageUrl, String color, Double price) {
-		ID = iD;
-		Description = description;
-		Slug = slug;
-		Brand = brand;
-		Category = category;
-		New = new1;
-		Featured = featured;
-		Active = active;
-		ImageUrl = imageUrl;
-		Color = color;
-		Price = price;
+
+	public Product(Integer iD, String description, String slug, Category category, Brand brand, boolean newProduct, boolean featuredProduct,
+				   boolean activeProduct, String imageUrl, String color, Double price) {
+		this.iD = iD;
+		this.description = description;
+		this.slug = slug;
+		this.newProduct = newProduct;
+		this.featuredProduct = featuredProduct;
+		this.activeProduct = activeProduct;
+		this.brand = brand;
+		this.category = category;
+		this.imageUrl = imageUrl;
+		this.color = color;
+		this.price = price;
 		this.setTitle(setProductTitle());
 	}
 
 	// Setters & Getters methods
-	public Integer getID() {
-		return ID;
+	public Integer getiD() {
+		return iD;
 	}
-	
-	public void setID(Integer iD) {
-		ID = iD;
+
+	public void setiD(Integer iD) {
+		this.iD = iD;
 	}
+
 	public String getTitle() {
-		return Title;
+		return title;
 	}
+
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
+
 	public String getDescription() {
-		return Description;
+		return description;
 	}
+
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
+
 	public String getSlug() {
-		return Slug;
+		return slug;
 	}
+
 	public void setSlug(String slug) {
-		Slug = slug;
+		this.slug = slug;
 	}
-	
-	public boolean isNew() {
-		return New;
+
+	public boolean isNewProduct() {
+		return newProduct;
 	}
-	public void setNew(boolean new1) {
-		New = new1;
+
+	public void setNewProduct(boolean newProduct) {
+		this.newProduct = newProduct;
 	}
-	public boolean isFeatured() {
-		return Featured;
+
+	public boolean isFeaturedProduct() {
+		return featuredProduct;
 	}
-	public void setFeatured(boolean featured) {
-		Featured = featured;
+
+	public void setFeaturedProduct(boolean featuredProduct) {
+		this.featuredProduct = featuredProduct;
 	}
-	public boolean isActive() {
-		return Active;
+
+	public boolean isActiveProduct() {
+		return activeProduct;
 	}
-	public void setActive(boolean active) {
-		Active = active;
+
+	public void setActiveProduct(boolean activeProduct) {
+		this.activeProduct = activeProduct;
 	}
+
 	public Brand getBrand() {
-		return Brand;
+		return brand;
 	}
-	public void setBrand_id(Brand brand) {
-		Brand = brand;
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
 	}
+
 	public Category getCategory() {
-		return Category;
+		return category;
 	}
-	public void setCategory_id(Category category) {
-		Category = category;
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
+
 	public String getImageUrl() {
-		return ImageUrl;
+		return imageUrl;
 	}
+
 	public void setImageUrl(String imageUrl) {
-		ImageUrl = imageUrl;
+		this.imageUrl = imageUrl;
 	}
+
 	public String getColor() {
-		return Color;
+		return color;
 	}
+
 	public void setColor(String color) {
-		Color = color;
+		this.color = color;
 	}
+
 	public Double getPrice() {
-		return Price;
+		return price;
 	}
+
 	public void setPrice(Double price) {
-		Price = price;
+		this.price = price;
 	}
 
 	// Customising product title to be displayed in `isNew-Color-Brand` format
 	public String setProductTitle(){
 		try {
-			if (this.isNew()) {
+			if (this.isNewProduct()) {
 				return "New-" + this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand().getTitle().substring(0,1).toUpperCase() + this.getBrand().getTitle().substring(1);
 			}
 			return this.getColor().substring(0, 1).toUpperCase() + this.getColor().substring(1) + "-" + this.getBrand().getTitle().substring(0,1).toUpperCase() + this.getBrand().getTitle().substring(1);
@@ -148,7 +169,7 @@ public class Product implements Comparable<Product>{
 
 	@Override
 	public String toString() {
-		return "Product [ID:" + getID() +", Title:" + getTitle() + "]";
+		return "Product [ID:" + getiD() +", Title:" + getTitle() + "]";
 	}
 
 	@Override

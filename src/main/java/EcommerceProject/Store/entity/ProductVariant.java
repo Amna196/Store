@@ -1,7 +1,12 @@
 package EcommerceProject.Store.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class ProductVariant {
 
+    @Id
     private String sku;
     private String size;
     private int quantity;

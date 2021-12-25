@@ -12,55 +12,61 @@ public class Category {
 	// Define attributes of Category class
 	@Id
 	@GeneratedValue
-	private int ID;
-	private String Title;
-	private String Description;
-	private String BannerImage;
-	@OneToMany(mappedBy="ID")
+	private int iD;
+	private String title;
+	private String description;
+	private String bannerImage;
+	@OneToMany(mappedBy="iD")
 	private List<Product> products;
 	
 	//Constructor
 
 	public Category() {
 	}
-
 	public Category(int iD, String title, String description, String bannerImage) {
-		ID = iD;
-		Title = title;
-		Description = description;
-		BannerImage = bannerImage;
+		this.iD = iD;
+		this.title = title;
+		this.description = description;
+		this.bannerImage = bannerImage;
 	}
-	
+
 	// Setters & Getters methods
+
+	public int getiD() {
+		return iD;
+	}
+
+	public void setiD(int iD) {
+		this.iD = iD;
+	}
+
 	public String getTitle() {
-		return Title;
+		return title;
 	}
+
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
+
 	public String getDescription() {
-		return Description;
+		return description;
 	}
+
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
+
 	public String getBannerImage() {
-		return BannerImage;
+		return bannerImage;
 	}
+
 	public void setBannerImage(String bannerImage) {
-		BannerImage = bannerImage;
+		this.bannerImage = bannerImage;
 	}
 
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int iD) {
-		ID = iD;
-	}
 	@Override
 	public String toString() {
-		return "Category [id=" + ID +", Title=" + Title + ", Description=" + Description +"]";
+		return "Category [id=" + iD +", Title=" + title + ", Description=" + description +"]";
 	}
 	
 	

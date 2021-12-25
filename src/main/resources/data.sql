@@ -8,7 +8,7 @@ insert into Brand values(1,'nike','nike is cool','https://www.google.com/imgres'
 insert into Brand values(2,'ellese','ellese is nice','https://www.google.com/url');
 insert into Brand values(3,'adidas','adidas is nice','https://www.google.com/url');
 insert into Brand values(4,'twan','twan is great','https://www.google.com/url');
-insert into Brand values(5,'puma','puma is cood','https://www.google.com/url');
+insert into Brand values(5,'puma','puma is cool','https://www.google.com/url');
 
 --insert into Product values(1,'SportTop','First', select * from Category where iD=0 ,'Crew Neck style' ,select * from Brand where iD=0,'nike', false, true, true, 'https://cdn.tamanna.com/assets/foot_locker/nike/317344050080_01.jpg?quality=80&format=auto&width=1000', 'white', 19.750);
 --insert into Brand values(2, 'SportTop','Second',  categories.get(1), categories.get(1).getTitle(), brands.get(1), brands.get(1).getTitle(), true, false, true, "https://www.yoox.com/images/items/12/12518052WC_14_f.jpg?impolicy=crop&width=387&height=490", "black", 25.0));

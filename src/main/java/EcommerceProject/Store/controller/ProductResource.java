@@ -6,9 +6,7 @@ import EcommerceProject.Store.service.ProductDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,31 +19,45 @@ public class ProductResource {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@GetMapping("/products")
+	@GetMapping("/products")//fetching data from products list
 	public List<Product> retrieveAllProducts(){
 		return service.findAll();
 	}
 
-	@GetMapping(value = "/productPageable")
-	public Page productPageable(Pageable pageable){
+	@GetMapping(value = "/productPageable") //fetching data from database
+	public Page<Product> productPageable(Pageable pageable){
 		return productRepository.findAll(pageable);
 	}
 
-	@GetMapping("/products/new/{New}")
+	@GetMapping("/products/new/{New}")//fetching data from products list
 	public List<Product> retrieveNewProducts(@PathVariable boolean New){
 		return service.findNew(New);
 	}
 
+	@GetMapping("/newProducts") //fetching data from database
+	public List<Product> retrieveNewProducts(){
+		return productRepository.findByNewProductTrue();
+	}
 
-	
-	@GetMapping("/products/featured/{featured}")
+	@GetMapping("/products/featured/{featured}")//fetching data from products list
 	public List<Product> retrieveFeaturedProducts(@PathVariable boolean featured){
 		return service.findFeatured(featured);
+	}
+
+	@GetMapping("/featuredProducts") //fetching data from database
+	public List<Product> retrieveFeaturedProducts(){
+		return productRepository.findByFeaturedProductTrue();
 	}
 
 	@GetMapping("/products/category/{category}")
 	public List<Product> retrieveProductsByCategory(@PathVariable String category){
 		return service.findByCategory(category);
+	}
+
+	@GetMapping("/categoryProducts/{categoryID}") //fetching data from database
+	public List<Product> retrieveProductsByCategoryTitle(@PathVariable int categoryID){
+		List<Product> category = productRepository.findAllByCategoryiD(categoryID);
+		return category;
 	}
 
 	@GetMapping("/products/brand/{brand}")
@@ -59,9 +71,25 @@ public class ProductResource {
 		return sortedProducts;
 	}
 
+	@GetMapping("/sortProductsAsc")//fetching data from database
+	public List<Product> retrieveProductsByPriceAsc(){
+		return productRepository.findByOrderByPriceAsc();
+	}
+
 	@GetMapping("/products/sortByPriceDesc")
 	public List<Product> retrieveSortProductsByPriceDesc(){
 		return service.sortByPriceDesc();
+	}
+
+	@GetMapping("/sortProductsDesc")//fetching data from database
+	public List<Product> retrieveProductsByPriceDesc(){
+		return productRepository.findByOrderByPriceDesc();
+	}
+
+	//TODO: CREATE PRODUCT
+	@PostMapping("/products")
+	public void createProduct(@RequestBody Product product){
+		Product savedProduct = service.save(product);
 	}
 
 
