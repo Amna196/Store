@@ -1,25 +1,24 @@
 package EcommerceProject.Store.repository;
 
 import EcommerceProject.Store.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByNewProductTrue();
-    List<Product> findByFeaturedProductTrue();
-    List<Product> findByOrderByPriceAsc();
-    List<Product> findByOrderByPriceDesc();
-//    List<Product> findCategoryByTitle(String categoryTitle);
+    Page<Product> findByNewProductTrue(Pageable pageable);
 
-//    List<Product> findCategoryByID(String categoryID);
+    Page<Product> findByFeaturedProductTrue(Pageable pageable);
 
-//    List<Product> findCategoryByiD(int categoryID);
+    Page<Product> findByOrderByPriceAsc(Pageable pageable);
 
-//    List<Product> findAllCategoryByiD(int categoryID);
+    Page<Product> findByOrderByPriceDesc(Pageable pageable);
 
-    List<Product> findAllByCategoryiD(int categoryID);
+    Page<Product> findAllByCategory_title(String categoryTitle, Pageable pageable);
+
+    Page<Product> findByBrand_title(String brandTitle, Pageable pageable);
+
 }

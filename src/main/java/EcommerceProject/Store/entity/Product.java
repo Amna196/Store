@@ -4,46 +4,53 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
-public class Product implements Comparable<Product>{
+public class Product<variant> implements Comparable<Product>{
 	
 	// Define attributes of Product class
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer iD;
 	@Size(min=1, max=255, message="Give Your Product a Title!")
 	private String title;
 	private String description;
 	private String slug;
 	
-//	@Column(name="new_product")
+	@Column(name="new_product")
 	private boolean newProduct;
 	
-//	@Column(name="featured_product")
+	@Column(name="featured_product")
 	private boolean featuredProduct;
 	
-//	@Column(name="active_product")
+	@Column(name="active_product")
 	private boolean activeProduct;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Brand brand;
 	
-	@ManyToOne(fetch=FetchType.LAZY)//@OneToMany(mappedBy="ID")
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Category category;
+
+	@OneToMany(mappedBy="product")
+	private List<ProductVariant> variants;
+
 	private String imageUrl;
 	private String color;
-	private Double price;
-	
+	private BigDecimal price;
+
+
 //	Constructors
 	protected Product() {
 
 	}
 
 	public Product(Integer iD, String description, String slug, Category category, Brand brand, boolean newProduct, boolean featuredProduct,
-				   boolean activeProduct, String imageUrl, String color, Double price) {
+				   boolean activeProduct, String imageUrl, String color, BigDecimal price, List<ProductVariant> variants) {
 		this.iD = iD;
 		this.description = description;
 		this.slug = slug;
@@ -56,6 +63,7 @@ public class Product implements Comparable<Product>{
 		this.color = color;
 		this.price = price;
 		this.setTitle(setProductTitle());
+		this.variants = variants;
 	}
 
 	// Setters & Getters methods
@@ -147,12 +155,20 @@ public class Product implements Comparable<Product>{
 		this.color = color;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public List<ProductVariant> getVariant() {
+		return variants;
+	}
+
+	public void setVariant(List<ProductVariant> variant) {
+		this.variants = variants;
 	}
 
 	// Customising product title to be displayed in `isNew-Color-Brand` format

@@ -6,6 +6,7 @@ import EcommerceProject.Store.service.ProductDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,19 +15,65 @@ import java.util.List;
 public class ProductResource {
 
 	@Autowired
-	private ProductDaoService service;
+	private ProductDaoService service; //for fetching data from lists defined in Dao class
 
 	@Autowired
-	private ProductRepository productRepository;
+	private ProductRepository productRepository; //for fetching built-in methods in repository interface extended JpaRepository
+
+
+   //=================================================================== Fetching data from MYSQL database ============================================================
+	@GetMapping(value = "/productPageable") //fetching data from database //1
+	public Page<Product> productPageable(Pageable pageable,  @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		 return productRepository.findAll(paging);
+
+	}
+
+	@GetMapping("/newProducts") //fetching data from database            //2
+	public Page<Product> retrieveNewProducts(Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findByNewProductTrue(paging);
+	}
+
+	@GetMapping("/featuredProducts") //fetching data from database      //3
+	public Page<Product> retrieveFeaturedProducts(Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findByFeaturedProductTrue(paging);
+	}
+
+	@GetMapping("/categoryProducts/{categoryTitle}") //fetching data from database   //4
+	public Page<Product> retrieveProductsByCategoryTitle(@PathVariable String categoryTitle, Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findAllByCategory_title(categoryTitle, paging);
+	}
+
+	@GetMapping("/brandProducts/{brandTitle}") //fetching data from database          //5
+	public Page<Product> retrieveProductsByBrand(@PathVariable String brandTitle, Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findByBrand_title(brandTitle, paging);
+	}
+
+	@GetMapping("/sortProductsAsc")//fetching data from database                    //6
+	public Page<Product> retrieveProductsByPriceAsc(Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findByOrderByPriceAsc(paging);
+	}
+
+	@GetMapping("/sortProductsDesc")//fetching data from database                  //7
+	public Page<Product> retrieveProductsByPriceDesc(Pageable pageable, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
+		Pageable paging = PageRequest.of(page, size);
+		return productRepository.findByOrderByPriceDesc(paging);
+	}
+
+//	@PostMapping("/placeProducts") //posting data to database
+//	public void createProduct(@RequestBody Product product){
+//		Product savedProduct = productRepository.save(product);
+//	}
+	//=====================================    Fetching data from lists in Dao class =================================================================
 
 	@GetMapping("/products")//fetching data from products list
 	public List<Product> retrieveAllProducts(){
 		return service.findAll();
-	}
-
-	@GetMapping(value = "/productPageable") //fetching data from database
-	public Page<Product> productPageable(Pageable pageable){
-		return productRepository.findAll(pageable);
 	}
 
 	@GetMapping("/products/new/{New}")//fetching data from products list
@@ -34,19 +81,9 @@ public class ProductResource {
 		return service.findNew(New);
 	}
 
-	@GetMapping("/newProducts") //fetching data from database
-	public List<Product> retrieveNewProducts(){
-		return productRepository.findByNewProductTrue();
-	}
-
 	@GetMapping("/products/featured/{featured}")//fetching data from products list
 	public List<Product> retrieveFeaturedProducts(@PathVariable boolean featured){
 		return service.findFeatured(featured);
-	}
-
-	@GetMapping("/featuredProducts") //fetching data from database
-	public List<Product> retrieveFeaturedProducts(){
-		return productRepository.findByFeaturedProductTrue();
 	}
 
 	@GetMapping("/products/category/{category}")
@@ -54,11 +91,6 @@ public class ProductResource {
 		return service.findByCategory(category);
 	}
 
-	@GetMapping("/categoryProducts/{categoryID}") //fetching data from database
-	public List<Product> retrieveProductsByCategoryTitle(@PathVariable int categoryID){
-		List<Product> category = productRepository.findAllByCategoryiD(categoryID);
-		return category;
-	}
 
 	@GetMapping("/products/brand/{brand}")
 	public List<Product> retrieveProductsByBrand(@PathVariable String brand){
@@ -71,41 +103,11 @@ public class ProductResource {
 		return sortedProducts;
 	}
 
-	@GetMapping("/sortProductsAsc")//fetching data from database
-	public List<Product> retrieveProductsByPriceAsc(){
-		return productRepository.findByOrderByPriceAsc();
-	}
-
 	@GetMapping("/products/sortByPriceDesc")
 	public List<Product> retrieveSortProductsByPriceDesc(){
 		return service.sortByPriceDesc();
 	}
 
-	@GetMapping("/sortProductsDesc")//fetching data from database
-	public List<Product> retrieveProductsByPriceDesc(){
-		return productRepository.findByOrderByPriceDesc();
-	}
-
-	//TODO: CREATE PRODUCT
-	@PostMapping("/products")
-	public void createProduct(@RequestBody Product product){
-		Product savedProduct = service.save(product);
-	}
 
 
-////	@GetMapping("/products/{pageNo}")
-//	@RequestMapping(value = "/listPageable", method = RequestMethod.GET)
-//	public Page<Product> getProductList(Pageable pageable){
-//		int pageSize = 2;
-//		return  productRepository.findAll(pageable);//getProductsList(pageNo-1,pageSize);
-//
-//	}
-
-//	@GetMapping("/productss")
-//	public String listAll(Model model){
-//		List<Product> listProducts = productRepository.findAll();
-//		model.addAttribute("listProducts", listProducts);
-//		return  "products";
-//
-//	}
 }
