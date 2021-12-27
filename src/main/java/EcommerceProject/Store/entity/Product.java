@@ -43,7 +43,6 @@ public class Product<variant> implements Comparable<Product>{
 	private String color;
 	private BigDecimal price;
 
-
 //	Constructors
 	protected Product() {
 
