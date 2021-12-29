@@ -73,23 +73,6 @@ public class ProductResource {
 //	public void createProduct(@RequestBody Product product){
 //		Product savedProduct = productRepository.save(product);
 //	}
-	//=================================================================== Fetching data from MYSQL database <phase2>============================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	//=====================================    Fetching data from lists in Dao class =================================================================
 
 	@GetMapping("/products")//fetching data from products list
