@@ -25,7 +25,7 @@ public class ProductResource {
 	private ProductRepository productRepository; //for fetching built-in methods in repository interface extended JpaRepository
 
 
-   //=================================================================== Fetching data from MYSQL database ============================================================
+   //=================================================================== Fetching data from MYSQL database <phase1>============================================================
 	@GetMapping(value = "/productPageable") //fetching data from database //1
 	public ResponseEntity<Page<Product>> productPageable(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size){
 		Pageable paging = PageRequest.of(page, size);
@@ -73,6 +73,23 @@ public class ProductResource {
 //	public void createProduct(@RequestBody Product product){
 //		Product savedProduct = productRepository.save(product);
 //	}
+	//=================================================================== Fetching data from MYSQL database <phase2>============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//=====================================    Fetching data from lists in Dao class =================================================================
 
 	@GetMapping("/products")//fetching data from products list

@@ -7,7 +7,7 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class Category {
+public class Category{
 	
 	// Define attributes of Category class
 	@Id
@@ -18,7 +18,9 @@ public class Category {
 	private String bannerImage;
 	@OneToMany(mappedBy="iD")
 	private List<Product> products;
-	
+
+
+
 	//Constructor
 
 	public Category() {
