@@ -24,4 +24,4 @@ Create Four Models `Product` `ProductVariant` `Category` `Brand`
         * all products sorted by price high 
 
 ### Database schema
-Database schema created in dbdesigner.net [Ecommerce-Project](https://app.dbdesigner.net/designer/schema/483522)
+Database schema created in dbdesigner.net [Ecommerce-Project](https://dbdesigner.page.link/fB7bvUUEwWb6Tcbq8)
