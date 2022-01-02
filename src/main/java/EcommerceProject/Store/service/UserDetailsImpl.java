@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserDetailsImpl implements UserDetails{
     private static final long serialVersionUID = 1L;
@@ -27,13 +28,13 @@ public class UserDetailsImpl implements UserDetails{
         this.password = password;
     }
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(Optional<User> user) {
 
         return new UserDetailsImpl(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword());
+                user.get().getId(),
+                user.get().getUsername(),
+                user.get().getEmail(),
+                user.get().getPassword());
     }
 
     @Override

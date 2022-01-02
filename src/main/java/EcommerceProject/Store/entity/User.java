@@ -1,6 +1,7 @@
 package EcommerceProject.Store.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+@Getter
 @Data
 @NoArgsConstructor
 @Entity
@@ -30,11 +31,15 @@ public class User {
 
     @Email
     private String email;
+//    @OneToOne(fetch=FetchType.LAZY)
+//    @JsonIgnore
+//    private Cart cart;
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
+
 
 }

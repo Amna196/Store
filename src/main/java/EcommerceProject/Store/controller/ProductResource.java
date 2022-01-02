@@ -8,14 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/list")
 public class ProductResource {
 
 	@Autowired
@@ -68,11 +66,6 @@ public class ProductResource {
 		Pageable paging = PageRequest.of(page, size);
 		return ResponseEntity.ok().body(productRepository.findByOrderByPriceDesc(paging));
 	}
-
-//	@PostMapping("/placeProducts") //posting data to database
-//	public void createProduct(@RequestBody Product product){
-//		Product savedProduct = productRepository.save(product);
-//	}
 	//=====================================    Fetching data from lists in Dao class =================================================================
 
 	@GetMapping("/products")//fetching data from products list
