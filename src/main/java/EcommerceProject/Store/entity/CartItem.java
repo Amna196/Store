@@ -14,10 +14,12 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch=FetchType.LAZY)
+
+    @ManyToOne(fetch=FetchType.EAGER)
     @JsonIgnore
     private Cart cart;
-    @OneToMany
+
+    @OneToMany(mappedBy = "cartItem")
     private List<ProductVariant> productVariants;
     private BigDecimal price;
     private int nou;//Number Of Unit

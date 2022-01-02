@@ -28,8 +28,8 @@ public class Cart {
     private String dateTimeCreated;
     private Long userId;
 
-    @OneToMany(mappedBy = "id")
-    private List<CartItem> cartItems; //=> RELATION ManyToOne || ManyToMany
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 
     public Cart(int id) {
         this.id = id;

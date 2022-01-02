@@ -1,12 +1,15 @@
 package EcommerceProject.Store.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
+@Setter
 @Entity
 public class ProductVariant {
 
@@ -14,6 +17,8 @@ public class ProductVariant {
     @Id
     private String sku;
     private String size;
+
+    @Size(min = 0)
     private int quantity;
 
     @ManyToOne(fetch= FetchType.EAGER)
