@@ -25,9 +25,9 @@ public class ProductVariant {
     @JsonIgnore
     private Product product;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private CartItem cartItem;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JsonIgnore
+//    private CartItem cartItem;
 
     // Constructors
     public ProductVariant() {

@@ -38,4 +38,5 @@ public class Cart {
     public UUID getUuid() {
         return uuid == null ? UUID.randomUUID() : uuid;
     }
+
 }

@@ -15,4 +15,6 @@ public interface CartRepository extends JpaRepository<Cart, String> {
     Cart findByuserId(Long id);
 
     Page<Cart> findByuserId(Long id, Pageable paging);
+
+    boolean existsByuserId(Long id);
 }

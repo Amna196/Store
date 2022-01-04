@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Entity
@@ -19,8 +18,8 @@ public class CartItem {
     @JsonIgnore
     private Cart cart;
 
-    @OneToMany(mappedBy = "cartItem")
-    private List<ProductVariant> productVariants;
+//    @OneToMany(mappedBy = "cartItem")
+    private String sku;
     private BigDecimal price;
     private int nou;//Number Of Unit
     private Boolean active;
