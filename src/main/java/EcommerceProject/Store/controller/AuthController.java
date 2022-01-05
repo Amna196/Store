@@ -72,9 +72,13 @@ public class AuthController{
     @PostMapping("/signin")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-            );
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+//            if(loginRequest.getUsername().length() <20){
+//                System.out.println("inside " + loginRequest);
+//                throw new EmptyInputException("400","Input Field is empty");
+//            }
+
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
         }
@@ -83,7 +87,12 @@ public class AuthController{
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        final Date jwt_expiryDate = jwtTokenUtil.extractExpiration(jwt);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        final String refreshJwt = jwtTokenUtil.refreshToken(userDetails);
+
+        return ResponseEntity.ok(new JwtResponse(jwt, formatter.format(jwt_expiryDate), refreshJwt));
     }
 
     @PostMapping("/signup")

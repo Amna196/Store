@@ -31,6 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+//        http.cors().and().authorizeRequests()
+//                .antMatchers(HttpMethod.POST, "/signin").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                // this disables session creation on Spring Security
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable().authorizeRequests().antMatchers("/signin").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/users").permitAll()
@@ -44,7 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-//        return NoOpPasswordEncoder.getInstance();
 
     }
 

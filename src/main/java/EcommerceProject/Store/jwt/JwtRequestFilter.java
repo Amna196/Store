@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtRequestFilter extends OncePerRequestFilter{
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -57,6 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //        chain.doFilter(request, response);
 //
 //    }
+
 @Override
 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
@@ -82,7 +83,6 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7, headerAuth.length());
         }
