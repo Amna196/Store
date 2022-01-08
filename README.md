@@ -23,5 +23,23 @@ Create Four Models `Product` `ProductVariant` `Category` `Brand`
         * all products sorted by price low 
         * all products sorted by price high 
 
+## Phase2:
+Create Four Models `Cart` `CartItem` `User` `Signin` `Signup`
+- User can add items to cart
+- **Cart:** [UUID, date and time created, user,total, CartItem]
+- every t-shirt has a ProductVariant 
+-  **CartItem:** [cart, product variant, quantity , price , active].
+- APIs Required for Phase2:
+- Catalog APIs are paginated. 
+    - The required APIs are: 
+        * cart
+        * signin api
+        * signout api 
+        * create cart 
+        * add item in cart 
+        * increase item quantity in cart
+        * decrease item quantity in cart 
+        * delete item in cart 
+
 ### Database schema
 Database schema created in dbdesigner.net [Ecommerce-Project](https://dbdesigner.page.link/fB7bvUUEwWb6Tcbq8)
