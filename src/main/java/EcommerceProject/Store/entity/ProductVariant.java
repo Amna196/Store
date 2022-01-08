@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
 
 @Setter
 @Entity
@@ -18,7 +18,7 @@ public class ProductVariant {
     private String sku;
     private String size;
 
-    @Size(min = 0)
+    @Min(0)
     private int quantity;
 
     @ManyToOne(fetch= FetchType.EAGER)

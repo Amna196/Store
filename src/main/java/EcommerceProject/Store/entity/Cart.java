@@ -1,7 +1,8 @@
 package EcommerceProject.Store.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,9 +11,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
-@Data
+@Getter
 @Entity
 public class Cart {
 
@@ -30,6 +32,9 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItems;
+
+//    @OneToMany(mappedBy = "cart")
+//    private List<Ordering> ordering;
 
     public Cart(int id) {
         this.id = id;

@@ -1,4 +1,4 @@
-package EcommerceProject.Store.advice;
+package EcommerceProject.Store.controller;
 
 import EcommerceProject.Store.exception.EmptyInputException;
 import org.springframework.http.HttpStatus;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.NoSuchElementException;
 
 @org.springframework.web.bind.annotation.ControllerAdvice
-public class MyControllerAdvice {
+public class ExceptionController {
 
     @ExceptionHandler(EmptyInputException.class)
     public ResponseEntity<String> handleEmptyInput(EmptyInputException emptyInputException){

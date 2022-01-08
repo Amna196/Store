@@ -1,19 +1,17 @@
 package EcommerceProject.Store.entity;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
+
 @Getter
-@Data
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User {
 
@@ -26,14 +24,14 @@ public class User {
     private String username;
 
     @NotBlank
-//    @Size(max = 20)
     private String password;
 
     @Email
     private String email;
-//    @OneToOne(fetch=FetchType.LAZY)
-//    @JsonIgnore
-//    private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<Ordering> orderings;
+
 
     public User(String username, String email, String password) {
         this.username = username;

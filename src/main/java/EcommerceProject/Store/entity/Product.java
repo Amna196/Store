@@ -39,6 +39,9 @@ public class Product<variant> implements Comparable<Product>{
 	@OneToMany(mappedBy="product")
 	private List<ProductVariant> variants;
 
+	@OneToMany(mappedBy="product")
+	private List<CartItem> items;
+
 	private String imageUrl;
 	private String color;
 	private BigDecimal price;
