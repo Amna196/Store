@@ -3,16 +3,19 @@ package EcommerceProject.Store.controller;
 import EcommerceProject.Store.entity.*;
 import EcommerceProject.Store.exception.EmptyInputException;
 import EcommerceProject.Store.jwt.JwtUtils;
+import EcommerceProject.Store.openfeign.MyFatoorahProxy;
 import EcommerceProject.Store.payload.request.LoginRequest;
 import EcommerceProject.Store.payload.request.SignupRequest;
 import EcommerceProject.Store.payload.response.JwtResponse;
 import EcommerceProject.Store.payload.response.MessageResponse;
 import EcommerceProject.Store.repository.*;
 import EcommerceProject.Store.service.UserDetailsServiceImpl;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -51,6 +54,15 @@ public class AuthController{
 
     @Autowired
     PasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    MyFatoorahProxy proxy;
+
+    @Autowired
+    PaymentResponseRepository paymentResponseRepository;
+
+    @Autowired
+    SendPaymentRepository sendPaymentRepository;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -348,7 +360,7 @@ public class AuthController{
     }
 
     // checkout return order Summary
-    @PostMapping("/checkout")
+    @PostMapping(value = "/checkout", produces = MediaTypes.HAL_JSON_VALUE) //ResponseEntity<?>
     public ResponseEntity<?> checkout(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         Pageable paging = PageRequest.of(page, size);
 
@@ -369,12 +381,12 @@ public class AuthController{
             List<CartItem> cartItems = cartItemRepository.findAllByCart_idAndStatusLikeOrStatusLike(cart.getId(), CartItem.cartItemStatus.INCART, CartItem.cartItemStatus.SOLDOUT); // fetch by cartId And status=[In cart - Sold out]
             System.out.println(cartItems);
             Ordering order = createOrdering(user);
-            // todo: get list of variants from skuIn cartItem
+            // get list of variants from skuIn cartItem
             for (CartItem cartItem : cartItems) {
                 System.out.println("inside loop..................");
                 Optional<ProductVariant> variant = variantRepository.findById(cartItem.getSku());
                 System.out.println(variant.get().getQuantity() >= cartItem.getNou());
-                //todo: compare quantity in variant with nou in cartItem
+                // compare quantity in variant with nou in cartItem
                 if (variant.get().getQuantity() >= cartItem.getNou()) {
 
                     cartItem.setStatus(CartItem.cartItemStatus.CHECKOUT);
@@ -382,7 +394,6 @@ public class AuthController{
                     variant.get().setQuantity(variant.get().getQuantity() - cartItem.getNou()); // newQuantity = oldQuantity - numberOfUnit in cartItem
                     variantRepository.save(variant.get());// update quantity in database
                     OrderingItem orderingItem = new OrderingItem();
-                    System.out.println("created orderingItem..................");
                     orderingItem.setPrice(cartItem.getPrice());
                     orderingItem.setQuantity(cartItem.getNou());
                     orderingItem.setProductName(cartItem.getProduct().getTitle());
@@ -390,45 +401,62 @@ public class AuthController{
                     orderingItem.setStatus(OrderingItem.OrderItemStatus.CHECKOUT);
                     // set orderItem in order
                     orderingItem.setOrdering(order);
-                    System.out.println("set orderingItem in order..................");
                     orderingItemRepository.save(orderingItem);
-                    System.out.println("saved orderingItem..................");
                 }
             }
         }
         if(cartItemRepository.existsByStatusAndCart(CartItem.cartItemStatus.CHECKOUT,cart)){// if cart has items in a checkout status
-            //todo: find orderingtime for user
-            //todo: update paumentstatus=checkout for ordering class
+
             Ordering ordering =  orderingRepository.findByUserAndPaymentStatusLike(user, Ordering.orderPaymentStatus.CREATED);
             List<OrderingItem> orderingItems = orderingItemRepository.findAllByOrdering(ordering);
             // set orderItems into the order
             ordering.setOrderingItems(orderingItems);
             ordering.setPaymentStatus(Ordering.orderPaymentStatus.CHECKOUT);
-            System.out.println("setPaymentStatus to checkout..................");
 
-            //todo: update item total in ordering class
+            // update item total in ordering class
             updateOrderTotal(ordering);
-            System.out.println("updateOrderTotal..................");
 
+            // update grand total in ordering class
+            ordering.setGrandTotal(ordering.getItemsTotal().add(ordering.getShippingTotal()));
 
-            //todo: update grid total in ordering class
-            ordering.setGrindTotal(ordering.getItemsTotal().add(ordering.getShippingTotal()));
-            System.out.println("setGrindTotal..................");
-
-            //todo: return ordering class
+            // store ordering object in database
             orderingRepository.save(ordering);
 
 
-            //todo: delete items in cart that has checkout status <cartItemRepository.findByStatusAndCart("checkout",cart)>
+            // delete items in cart that has checkout status <cartItemRepository.findByStatusAndCart("checkout",cart)>
             List<CartItem> cartItems = cartItemRepository.findByStatusAndCart(CartItem.cartItemStatus.CHECKOUT,cart);
             for(CartItem cartItem:cartItems){
                 cartItemRepository.delete(cartItem);
             }
+
+            // call payment path
+            SendPayment sendPayment = new SendPayment();
+            sendPayment.setUsername(username);
+            sendPayment.setNotification("ALL");
+            sendPayment.setEmail(user.getEmail());
+            sendPayment.setPhoneNumber(user.getPhoneNumber());
+            sendPayment.setTotal(ordering.getGrandTotal());
+            sendPaymentRepository.save(sendPayment);
+
+            // pass authentication and sendPayment object to My Fatoorah feign microservice
+            String authorization = "Bearer rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL";
+            JSONObject jsonObject = proxy.retrievePaymentValues(sendPayment, authorization);
+
+            LinkedHashMap data = (LinkedHashMap) jsonObject.get("Data");
+            ordering.setPaymentLink((String) data.get("InvoiceURL")); // set paymentURL into ordering object
+
+            // create PaymentResponse object and store it in database
+            PaymentResponse paymentResponse = new PaymentResponse();
+            paymentResponse.setInvoiceId((Integer) data.get("InvoiceId"));
+            paymentResponse.setStatus(PaymentResponse.PaymentStatus.PENDING);
+            paymentResponse.setTotal(ordering.getGrandTotal());
+            paymentResponse.setOrderId(ordering.getUuid());
+            paymentResponseRepository.save(paymentResponse);
+
             return ResponseEntity.ok().body(orderingRepository.findByuuidAndUser(ordering.getUuid(),ordering.getUser(), paging));
 
         }
         else {
-            System.out.println("inside null..................");
             throw new EmptyInputException("400", "Empty OrderingItems");
         }
 
@@ -436,20 +464,14 @@ public class AuthController{
 
     private Ordering createOrdering(User user) {
         Ordering ordering = new Ordering();
-        System.out.println("create ordering..................");
         Date date = new Date(); // This object contains the current date value
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-//            // set hashcode for UUID
-//            ordering.setUuid(ordering.getUuid());
         // set user id
         ordering.setUser(user);
-        System.out.println("create set user..................");
         // set current TimeAndDate
         ordering.setDateTimeCreated(formatter.format(date));
         ordering.setShippingTotal(BigDecimal.valueOf(3));
-        System.out.println("create setShippingTotal..................");
         ordering.setPaymentStatus(Ordering.orderPaymentStatus.CREATED);
-        System.out.println("setPaymentStatus for ordering to created..................");
         orderingRepository.save(ordering);
         return ordering;
     }
@@ -467,12 +489,10 @@ public class AuthController{
 
     // Calculate total amount in Ordering
     public void updateOrderTotal(Ordering ordering) {
-        System.out.println("ordering = " + ordering.getOrderingItems());
         if(ordering.getOrderingItems() == null) return;
         BigDecimal total = BigDecimal.valueOf(0);
         List<OrderingItem> orderingItems = ordering.getOrderingItems();
         for(OrderingItem items: orderingItems){
-            System.out.println("inside loop of total = " + ordering);
             total = total.add(items.getPrice().multiply(new BigDecimal(items.getQuantity())));
         }
         ordering.setItemsTotal(total);
@@ -496,5 +516,7 @@ public class AuthController{
         return ResponseEntity.ok().body(orderingRepository.findAllByUserAndPaymentStatus(user, Ordering.orderPaymentStatus.CLOSED, paging)); //closed
 
     }
+
+
 
 }

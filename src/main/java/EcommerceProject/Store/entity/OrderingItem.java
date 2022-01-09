@@ -1,11 +1,13 @@
 package EcommerceProject.Store.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties(value = { "id" })
 @Getter
 @Setter
 @NoArgsConstructor

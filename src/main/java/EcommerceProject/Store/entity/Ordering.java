@@ -1,13 +1,18 @@
 package EcommerceProject.Store.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
+@JsonIgnoreProperties(value = { "uuid" })
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,15 +31,14 @@ public class Ordering {
     private orderPaymentStatus paymentStatus; //['created', 'checkout', 'closed']
     private BigDecimal itemsTotal;
     private BigDecimal shippingTotal; // = BigDecimal.valueOf(3);
-    private BigDecimal grindTotal;// = itemsTotal.add(shippingTotal);
+    private BigDecimal grandTotal;// = itemsTotal.add(shippingTotal);
     private String dateTimeCreated;
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JsonIgnore
-//    private Cart cart;
 
-        // map cartItems to orderItem
     @OneToMany(mappedBy = "ordering")
     private List<OrderingItem> orderingItems; // get checkout items only
+
+    @JsonProperty("InvoiceURL")
+    private String paymentLink;
 
     public enum orderPaymentStatus{
         CREATED,
