@@ -22,6 +22,7 @@ public class Ordering {
 
     @Id
     @GeneratedValue
+    @JsonProperty("OrderNumber")
     private Long uuid;
 
     @ManyToOne(fetch= FetchType.EAGER)
@@ -39,6 +40,7 @@ public class Ordering {
 
     @JsonProperty("InvoiceURL")
     private String paymentLink;
+
 
     public enum orderPaymentStatus{
         CREATED,
